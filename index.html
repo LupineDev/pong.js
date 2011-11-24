@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        background-color: #333;
+      }
+
+      #game_area {
+        width: 400px;
+        height: 240px;
+        border: 1px solid black;
+        background-color: #aaa;
+        position: absolute;
+        margin: 100px 30%;
+      }
+
+      .paddle {
+        width: 10px;
+        height: 60px;
+        background-color: green;
+        position: absolute;
+      }
+
+      #paddle1 {
+        left: 0;
+        top: 90;
+      }
+
+      #paddle2 {
+        right: 0;
+        top: 90;
+      }
+
+      #ball {
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: red;
+        position: absolute;
+        top: 120px;
+        left: 195px;
+      }
+    </style>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="pong.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          console.log("hey");
+          Pong.Game.init();
+          });
+    </script>
+  </head>
+
+  <body>
+    <div id="game_area">
+      <div id="paddle1" class="paddle"></div>
+      <div id="paddle2" class="paddle"></div>
+      <div id="ball"></div>
+    </div>
+  </body>
+</html>
