@@ -6,10 +6,22 @@ Pong.Game = {
   paddleWidth: 10,
   paddleSpeed: 10,
   ballDiameter: 10,
+  refreshMs: 30,
   init: function() {
     Pong.Paddle.init();
     Pong.KeyListener.initKeyboard();
-  }
+    this.startGameLoop();
+  },
+  startGameLoop: function() {
+    console.log("game started", Pong.Ball.xPos());
+    //while (Pong.Ball.xPos() < Pong.Game.gameWidth) {
+      //setTimeout(function(){
+        Pong.Ball.update();
+      //}, 100);
+    //}
+    console.log("game stopped");
+  },
+  continueGame: true
 }
 
 Pong.Paddle = {
@@ -40,6 +52,41 @@ Pong.Paddle = {
       return true;
     else
       return false;
+  }
+}
+
+Pong.Ball= {
+  //directions: [
+    //{code:"SE","x":-1,"y":-1},
+    //{code:"SW","x":1,"y":-1},
+    //{code:"NE","x":-1,"y":1},
+    //{code:"NW","x":1,"y":1},
+  //],
+  xPos: function() {
+    return Number($("#ball").css("left").replace("px",""));
+  },
+  yPos: function() {
+    return Number($("#ball").css("top").replace("px",""));
+  },
+  vX: 5,
+  vY: 0,
+
+  update: function() {
+    //check collisions
+    //move from velocity
+    console.log("ball updated", this.xPos());
+    if (this.xPos() < Pong.Game.gameWidth) {
+      setTimeout(function(){
+      Pong.Ball.setPosition();
+      Pong.Ball.update();
+      }, Pong.Game.refreshMs);
+    }
+  },
+  setPosition: function() {
+    // update x
+    $("#ball").css("left", this.xPos() + this.vX);
+    // update y
+    $("#ball").css("top", this.yPos() + this.vY);
   }
 }
 
