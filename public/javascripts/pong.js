@@ -52,6 +52,12 @@ Pong.Paddle = {
       return true;
     else
       return false;
+  },
+  paddleTop: function(selector) {
+    return Number($(selector).css("top").replace("px",""));
+  },
+  paddleBottom: function(selector) {
+    return Number($(selector).css("top").replace("px","")) + Number($(selector).css("height").replace("px",""));
   }
 }
 
@@ -69,17 +75,47 @@ Pong.Ball= {
     return Number($("#ball").css("top").replace("px",""));
   },
   vX: 5,
-  vY: 0,
+  vY: 4,
+  reverseX: function() {
+    this.vX = -this.vX
+  },
+  reverseY: function() {
+    this.vY = -this.vY
+  },
 
   update: function() {
     //check collisions
     //move from velocity
     console.log("ball updated", this.xPos());
-    if (this.xPos() < Pong.Game.gameWidth) {
+    if (this.inBounds()) {
+      Pong.Ball.checkCollision();
       setTimeout(function(){
-      Pong.Ball.setPosition();
-      Pong.Ball.update();
+        Pong.Ball.setPosition();
+        Pong.Ball.update();
       }, Pong.Game.refreshMs);
+    }
+  },
+  inBounds: function() {
+    return (this.xPos() < (Pong.Game.gameWidth - Pong.Game.ballDiameter) && (this.xPos() > 0))
+  },
+  checkCollision: function() {
+    // right paddle
+    if (((this.yPos() - Pong.Game.ballDiameter/2) > Pong.Paddle.paddleTop("#paddle2")) && (this.yPos() + Pong.Game.ballDiameter/2) < (Pong.Paddle.paddleBottom("#paddle2")) && (this.xPos() > (Pong.Game.gameWidth - Pong.Game.paddleWidth - Pong.Game.ballDiameter))) {
+      //reverse x
+      this.reverseX();
+      console.log("right paddel!");
+    } else if (((this.yPos() - Pong.Game.ballDiameter/2) > Pong.Paddle.paddleTop("#paddle1")) && (this.yPos() + Pong.Game.ballDiameter/2) < (Pong.Paddle.paddleBottom("#paddle1")) && (this.xPos() < (Pong.Game.paddleWidth ))) {
+      // left paddle
+      this.reverseX();
+      console.log("left paddel!");
+    } else if (this.yPos() <= 0) {
+    // top
+      //reverse y
+      this.reverseY();
+    } else if (this.yPos() >= (Pong.Game.gameHeight - Pong.Game.ballDiameter)) {
+    // bottom
+      //reverse y
+      this.reverseY();
     }
   },
   setPosition: function() {
